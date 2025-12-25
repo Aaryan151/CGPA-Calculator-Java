@@ -1,41 +1,51 @@
 import java.util.Scanner;
 
-public class CGPACalculator {
+public class GradingSystem {
 
-    // Method to calculate SGPA
-    static double calculateSGPA(int[] credits, double[] grades, int n) {
-        double totalCredits = 0;
-        double weightedSum = 0;
-
-        for (int i = 0; i < n; i++) {
-            weightedSum += credits[i] * grades[i];
-            totalCredits += credits[i];
-        }
-        return weightedSum / totalCredits;
+    static char calculateGrade(double avg) {
+        if (avg >= 90)
+            return 'A';
+        else if (avg >= 75)
+            return 'B';
+        else if (avg >= 60)
+            return 'C';
+        else if (avg >= 40)
+            return 'D';
+        else
+            return 'F';
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        System.out.print("Enter number of students: ");
+        int students = sc.nextInt();
+
         System.out.print("Enter number of subjects: ");
-        int n = sc.nextInt();
+        int subjects = sc.nextInt();
 
-        int[] credits = new int[n];
-        double[] grades = new double[n];
+        double[][] marks = new double[students][subjects];
+        double[] average = new double[students];
+        char[] grade = new char[students];
 
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter credit for subject " + (i + 1) + ": ");
-            credits[i] = sc.nextInt();
-
-            System.out.print("Enter grade point for subject " + (i + 1) + ": ");
-            grades[i] = sc.nextDouble();
+        for (int i = 0; i < students; i++) {
+            double total = 0;
+            System.out.println("\nEnter marks for Student " + (i + 1));
+            for (int j = 0; j < subjects; j++) {
+                System.out.print("Subject " + (j + 1) + ": ");
+                marks[i][j] = sc.nextDouble();
+                total += marks[i][j];
+            }
+            average[i] = total / subjects;
+            grade[i] = calculateGrade(average[i]);
         }
 
-        double sgpa = calculateSGPA(credits, grades, n);
+        System.out.println("\n--- FINAL GRADING REPORT ---");
+        System.out.println("Student\tAverage\tGrade");
 
-        System.out.println("\n--- RESULT ---");
-        System.out.println("SGPA: " + String.format("%.2f", sgpa));
-        System.out.println("CGPA: " + String.format("%.2f", sgpa));
+        for (int i = 0; i < students; i++) {
+            System.out.printf("%d\t%.2f\t%c%n", (i + 1), average[i], grade[i]);
+        }
 
         sc.close();
     }
